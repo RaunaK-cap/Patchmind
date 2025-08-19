@@ -10,7 +10,7 @@ export async function POST(req:NextRequest ){
         headers: await headers() // you need to pass the headers object.
     })
 
-    console.log(session)
+    console.log(session) //will add this later on 
 
     const data = await req.json()
     const verifieddata = managedataschema.safeParse(data)
@@ -26,8 +26,9 @@ export async function POST(req:NextRequest ){
                 userid:verifieddata.data.userid,
                 title:verifieddata.data.title,
                 solution:verifieddata.data.solution,
-                codesnippet:verifieddata.data.codesnippet
-                
+                codesnippet:verifieddata.data.codesnippet,
+                status:verifieddata.data.status,
+                tag:verifieddata.data.tag,   
             }
         })
         return NextResponse.json({
