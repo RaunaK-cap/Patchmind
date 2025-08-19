@@ -27,6 +27,7 @@ import { Themetoggler } from "@/components/Theme-toggler";
 import { redirect } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const sidebarItems = [
   {
@@ -169,7 +170,17 @@ export default  function dashboardlayout({ children }: { children: ReactNode }) 
               </div>
             </div>
           </div>
-          <div className="flex-1 p-4">{children}</div>
+          <div className="flex-1 p-4">
+            <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+            >
+
+            {children}
+            </ThemeProvider>
+            </div>
         </div>
       </div>
     </>
