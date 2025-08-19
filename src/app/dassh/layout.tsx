@@ -26,6 +26,7 @@ import { cn } from "@/lib/utils";
 import { Themetoggler } from "@/components/Theme-toggler";
 import { redirect } from "next/navigation";
 import { Input } from "@/components/ui/input";
+import { authClient } from "@/lib/auth-client";
 
 const sidebarItems = [
   {
@@ -33,7 +34,7 @@ const sidebarItems = [
     label: "Dashboards",
     icon: BarChart3,
     active: false,
-    links: "/dassh/dashboard",
+    links: "/dassh",
   },
   {
     id: "issues",
@@ -47,7 +48,7 @@ const sidebarItems = [
     label: "My Error",
     icon: Logs,
     active: false,
-    links: "/dassh/my-error",
+    links: "/dassh/myerrors",
   },
   {
     id: "profile",
@@ -58,7 +59,7 @@ const sidebarItems = [
   },
 ];
 
-export default function dashboardlayout({ children }: { children: ReactNode }) {
+export default  function dashboardlayout({ children }: { children: ReactNode }) {
   return (
     <>
       <div className=" flex h-screen bg-background font-sans ">
@@ -69,12 +70,13 @@ export default function dashboardlayout({ children }: { children: ReactNode }) {
         >
           <div className="flex  items-center justify-center p-2 border-sidebar-border">
             <div className="flex items-center mt-2 ">
-              <div className="text-sm flex items-center gap-2">
-                <BrainCogIcon className="size-10" />
+              <div 
+              onClick={()=> redirect("/")}
+              className="text-sm flex items-center gap-2">
+                <BrainCogIcon className="size-10 cursor-pointer text-blue-600" />
                 <div>
                   <h2 className="text-lg"> PatchMind </h2>
                   <p className="text-sm dark:text-neutral-500 text-neutral-400">
-                    
                     Debug smarter
                   </p>
                 </div>
@@ -140,6 +142,9 @@ export default function dashboardlayout({ children }: { children: ReactNode }) {
                 <Plus className="h-4 w-4 mr-2" />
                 New Error
               </Button>
+              <div>
+               
+              </div>
               <div className="">
                 <Themetoggler />
               </div>
