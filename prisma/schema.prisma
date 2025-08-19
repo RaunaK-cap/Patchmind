@@ -80,6 +80,10 @@ model trackingdata {
   title String
   codesnippet String
   solution String
+  tag String
+  status String
+  createdAt  DateTime @default(now())
+  updatedAt DateTime?
   userid String
   User   User?  @relation(  fields: [userid], references: [id])
 
