@@ -24,7 +24,7 @@ export function LoginForm({
     startGithubTransition(async () => {
       await authClient.signIn.social({
         provider: "github",
-        callbackURL: "/dassh/create",
+        callbackURL: "/dassh",
         fetchOptions: {
           onSuccess: () => {
             toast("successfully login");
