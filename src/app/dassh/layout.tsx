@@ -1,7 +1,6 @@
 "use client";
 import { ReactNode } from "react";
 
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -12,7 +11,8 @@ import {
   LayoutDashboard,
   Plus,
   BrainCogIcon,
-  Menu,
+  
+  UserRoundIcon,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -21,13 +21,20 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
+  DropdownMenuGroup,
+  DropdownMenuShortcut,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { Themetoggler } from "@/components/Theme-toggler";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
-import { authClient } from "@/lib/auth-client";
+
 import { ThemeProvider } from "@/components/theme-provider";
+
+import { authClient } from "@/lib/auth-client";
+
+
+import { ProfileDropdownClient } from "../Components/ProfiledropdownClient";
 
 const sidebarItems = [
   {
@@ -60,7 +67,17 @@ const sidebarItems = [
   },
 ];
 
-export default  function dashboardlayout({ children }: { children: ReactNode }) {
+export async function logout() {
+  await authClient.signOut({
+    fetchOptions: {
+      onSuccess: () => {
+        redirect("/")
+      },
+    },
+  });
+}
+export default function Dashboardlayout({ children }: { children: ReactNode }) {
+ 
   return (
     <>
       <div className=" flex h-screen bg-background font-sans ">
@@ -71,9 +88,10 @@ export default  function dashboardlayout({ children }: { children: ReactNode }) 
         >
           <div className="flex  items-center justify-center p-2 border-sidebar-border">
             <div className="flex items-center mt-2 ">
-              <div 
-              onClick={()=> redirect("/")}
-              className="text-sm flex items-center gap-2">
+              <div
+                onClick={() => redirect("/")}
+                className="text-sm flex items-center gap-2"
+              >
                 <BrainCogIcon className="size-10 cursor-pointer text-blue-600" />
                 <div>
                   <h2 className="text-lg"> PatchMind </h2>
@@ -116,71 +134,69 @@ export default  function dashboardlayout({ children }: { children: ReactNode }) 
           </nav>
         </div>
 
-        {/* Main Content Area */}
         <div className="flex-1 flex flex-col ml-52">
-          {/* Top Bar */}
-          <div className="sticky top-0 z-30 backdrop-blur supports-[backdrop-filter]:bg-white/40 dark:supports-[backdrop-filter]:bg-zinc-950/40  border-zinc-200/60 dark:border-zinc-800/60">
+     
+          <div className="sticky top-0 z-30 backdrop-blur flex justify-between supports-[backdrop-filter]:bg-white/40 dark:supports-[backdrop-filter]:bg-zinc-950/40 border-zinc-200/60 dark:border-zinc-800/60">
             <div className="flex items-center gap-3 px-4 md:px-6 h-16">
-              <button className="md:hidden p-2 rounded-xl hover:bg-zinc-900/5 dark:hover:bg-zinc-100/10">
-                <Menu className="h-5 w-5" />
-              </button>
-              <div className="relative ml-auto md:ml-0 w-full md:max-w-md">
+           
+              <div className="relative flex w-full md:max-w-md gap-5">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 opacity-60" />
                 <Input
                   placeholder="Search errors, tags, snippets…"
                   className="pl-9 pr-24 rounded-2xl"
                 />
-                <div className="absolute right-2 top-1/2 -translate-y-1/2 flex gap-1">
-                  <Badge variant="secondary" className="rounded-xl">
-                    ⌘K
-                  </Badge>
-                </div>
+                <Button
+                  onClick={() => redirect("/dassh/create")}
+                  className="rounded-2xl hidden md:inline-flex"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  New Error
+                </Button>
               </div>
-              <Button
-                onClick={() => redirect("/dassh/create")}
-                className="rounded-2xl hidden md:inline-flex"
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                New Error
-              </Button>
+            </div>
+            
+           
+            <div className="flex items-center gap-4 px-4 md:px-6 h-16">
+              <Themetoggler />
               <div>
-               
-              </div>
-              <div className="">
-                <Themetoggler />
-              </div>
-              <div className="ml-auto md:ml-0 flex items-center gap-2">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>Profile</DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem className="gap-2">
-                      Profile
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="gap-2">
-                      Settings
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem className="gap-2 text-red-600">
-                      Logout
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+              <DropdownMenu  >
+      <DropdownMenuTrigger className="rounded-full p-5 "   asChild>
+        <Button variant="secondary">
+          <UserRoundIcon/>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-56" align="end">
+        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuGroup>
+          <DropdownMenuItem onClick={()=> redirect("/dassh/profile")}>
+            Profile
+            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+        <DropdownMenuItem 
+        onClick={()=> redirect("/dassh/profile")}
+        >API</DropdownMenuItem>
+
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={logout}>
+          Log out
+          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
               </div>
             </div>
           </div>
           <div className="flex-1 p-4">
             <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
             >
-
-            {children}
+              {children}
             </ThemeProvider>
-            </div>
+          </div>
         </div>
       </div>
     </>
