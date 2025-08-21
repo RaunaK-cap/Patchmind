@@ -1,16 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { managedataschema } from "../../../../zodschema/managedata";
 import { prismaclient } from "@/lib/db";
- // path to your Better Auth server instance
-import { headers } from "next/headers";
-import { auth } from "@/lib/auth";
+
 
 export async function POST(req:NextRequest ){
-    const session = await auth.api.getSession({
-        headers: await headers() // you need to pass the headers object.
-    })
-
-    console.log(session) //will add this later on 
 
     const data = await req.json()
     const verifieddata = managedataschema.safeParse(data)
