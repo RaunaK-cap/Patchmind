@@ -55,7 +55,7 @@ const Page = () => {
             <div className="space-y-2">
               <Label>Enter your own API </Label>
               <Input type="password" placeholder="sk-..." />
-              <Button className="rounded-xl w-full ">Save</Button>
+              <Button  className="rounded-xl w-full ">Save</Button>
             </div>
             <div>
               <CardContent className=" bg-blue-200/10 h-[8rem] rounded-xl p-4">
