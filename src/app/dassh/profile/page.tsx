@@ -8,9 +8,13 @@ import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { authClient } from "@/lib/auth-client";
 import { logout } from "../layout";
+import { redirect } from "next/navigation";
 
 const Page = () => {
   const { data: session } = authClient.useSession();
+  if(!session){
+        redirect("/")
+  }
   return (
     <div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

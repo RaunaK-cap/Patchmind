@@ -11,7 +11,6 @@ import {
   LayoutDashboard,
   Plus,
   BrainCogIcon,
-  
   UserRoundIcon,
 } from "lucide-react";
 import {
@@ -32,7 +31,6 @@ import { Input } from "@/components/ui/input";
 import { ThemeProvider } from "@/components/theme-provider";
 
 import { authClient } from "@/lib/auth-client";
-
 
 import { ProfileDropdownClient } from "../Components/ProfiledropdownClient";
 
@@ -71,13 +69,12 @@ export async function logout() {
   await authClient.signOut({
     fetchOptions: {
       onSuccess: () => {
-        redirect("/")
+        redirect("/");
       },
     },
   });
 }
 export default function Dashboardlayout({ children }: { children: ReactNode }) {
- 
   return (
     <>
       <div className=" flex h-screen bg-background font-sans ">
@@ -135,10 +132,8 @@ export default function Dashboardlayout({ children }: { children: ReactNode }) {
         </div>
 
         <div className="flex-1 flex flex-col ml-52">
-     
           <div className="sticky top-0 z-30 backdrop-blur flex justify-between supports-[backdrop-filter]:bg-white/40 dark:supports-[backdrop-filter]:bg-zinc-950/40 border-zinc-200/60 dark:border-zinc-800/60">
             <div className="flex items-center gap-3 px-4 md:px-6 h-16">
-           
               <div className="relative flex w-full md:max-w-md gap-5">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 opacity-60" />
                 <Input
@@ -154,36 +149,39 @@ export default function Dashboardlayout({ children }: { children: ReactNode }) {
                 </Button>
               </div>
             </div>
-            
-           
+
             <div className="flex items-center gap-4 px-4 md:px-6 h-16">
               <Themetoggler />
               <div>
-              <DropdownMenu  >
-      <DropdownMenuTrigger className="rounded-full p-5 "   asChild>
-        <Button variant="secondary">
-          <UserRoundIcon/>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end">
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
-        <DropdownMenuGroup>
-          <DropdownMenuItem onClick={()=> redirect("/dassh/profile")}>
-            Profile
-            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuItem 
-        onClick={()=> redirect("/dassh/profile")}
-        >API</DropdownMenuItem>
+                <DropdownMenu>
+                  <DropdownMenuTrigger className="rounded-full p-5 " asChild>
+                    <Button variant="secondary">
+                      <UserRoundIcon />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56" align="end">
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuGroup>
+                      <DropdownMenuItem
+                        onClick={() => redirect("/dassh/profile")}
+                      >
+                        Profile
+                        <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+                      </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                    <DropdownMenuItem
+                      onClick={() => redirect("/dassh/profile")}
+                    >
+                      API
+                    </DropdownMenuItem>
 
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={logout}>
-          Log out
-          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={logout}>
+                      Log out
+                      <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
           </div>

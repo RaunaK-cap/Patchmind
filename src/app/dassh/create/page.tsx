@@ -20,6 +20,7 @@ import {
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { useTransition } from "react";
+import { redirect } from "next/navigation";
 
 const createErrorSchema = z.object({
   title: z.string().min(2, "title must required"),
@@ -32,6 +33,10 @@ const createErrorSchema = z.object({
 
 export default function MonitoringDashboard() {
   const [onsubmit, startonsubmit] = useTransition();
+  const { data: session } = authClient.useSession();
+  if(!session){
+    redirect("/")
+  }
 
   const form = useForm<z.infer<typeof createErrorSchema>>({
     resolver: zodResolver(createErrorSchema),
@@ -46,7 +51,6 @@ export default function MonitoringDashboard() {
   });
 
   const submit = async (values: z.infer<typeof createErrorSchema>) => {
-    const session = await authClient.getSession();
     startonsubmit(async () => {
       try {
         const response = await axios.post("/api/managedata", {

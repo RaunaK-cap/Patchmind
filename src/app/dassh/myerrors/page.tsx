@@ -1,44 +1,91 @@
-
+"use client"
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { authClient } from "@/lib/auth-client";
+import { redirect } from "next/navigation";
 
-import React from "react";
-import { auth } from "@/lib/auth";
-import { prismaclient } from "@/lib/db";
-import { headers } from "next/headers";
+interface ErrorData {
+  id: string;
+  title: string;
+  solution: string;
+  codesnippet: string;
+  tag: string;
+  createdAt: string;
+  status: string;
+}
 
+const Page = () => {
+  const { data: session } = authClient.useSession();
+  const [errors, setErrors] = useState<ErrorData[]>([]);
+  const [loading, setLoading] = useState(true);
 
+  if(!session){
+    redirect("/")
+  }
 
-const page = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers() // you need to pass the headers object.
-})
-
-  const errors  = await prismaclient.trackingdata.findMany({
-    where:{
-      userid:session?.user.id
+  useEffect(() => {
+    if (session?.user?.id) {
+      fetchErrors();
     }
-  });
+  }, [session?.user?.id]);
+
+  const fetchErrors = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.post("/api/getdata", {
+        id: session?.user.id
+      });
+      setErrors(response.data.data || []);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setErrors([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      await axios.delete("/api/delete", {
+        data: { id: id }
+      });
+      // Refresh the data after deletion
+      fetchErrors();
+    } catch (error) {
+      console.error("Error deleting:", error);
+    }
+  };
+
   
 
-
   return (
-    <div className="p-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {errors.map((error ) => (
-        <Card key={error.id} className="rounded-lg h-[30rem] p-2 overflow-x-hidden ">
-          <CardHeader >
-            <CardTitle className="text-2xl font-bold"> {error.title}</CardTitle>
-            <div className="flex flex-col mt-2 ">
-            <p className="font-semibold text-sm"> Solution: </p>
-            <p className="text-sm mt-2 px-5">{error.solution}</p>
+    <span className="p-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {loading? (<div className="flex items-center justify-center relative left-[30rem] top-80 ">
+        <h1 className="text-lg"> Getting data ... </h1>
+      </div>):
+      " "
+      }
+
+      {errors.map((error) => (
+        <Card
+          key={error.id}
+          className="relative backdrop-blur-md border border-white/10 shadow-xl rounded-2xl hover:scale-[1.01] transition-all"
+        >
+          <CardContent className="overflow-auto no-scrollbar">
+            <h1 className="text-xl font-bold dark:text-white">{error.title}</h1>
+
+            <div className="flex flex-col mt-2">
+              <p className="font-semibold text-sm">Solution:</p>
+              <p className="text-sm mt-2 px-5">{error.solution}</p>
             </div>
-          </CardHeader>
-          <CardContent className="">
+
             <div
-              className=" dark:bg-yellow-200/5 bg-neutral-800 p-2  h-[80rem]  rounded-lg text-sm overflow-y-hidden overflow-x-hidden "
+              className="dark:bg-yellow-200/5 bg-neutral-800 p-2 rounded-lg text-sm overflow-auto no-scrollbar"
               style={{
                 maxHeight: "16rem",
                 whiteSpace: "pre-wrap",
@@ -46,19 +93,16 @@ const page = async () => {
               }}
             >
               <SyntaxHighlighter
-                
                 language="javascript"
                 style={vscDarkPlus}
                 customStyle={{
-                  height:300,
-                  margin: 4,
+                  height: 300,
+                  margin: 2,
                   padding: 5,
                   fontSize: "1rem",
                   background: "transparent",
                   whiteSpace: "pre-wrap",
                   wordBreak: "break-word",
-                  overflowX: "visible",
-                  font:"bold",// prevent X scroll
                 }}
                 wrapLongLines={true}
               >
@@ -66,29 +110,32 @@ const page = async () => {
               </SyntaxHighlighter>
             </div>
 
-            <div className="flex flex-wrap gap-2 pt-2">
-              <Badge> {error.tag}</Badge>
+            <div className="flex flex-wrap gap-2 pt-2 justify-between">
+              <Badge className="bg-yellow-400/20 text-yellow-900 dark:text-white">
+                {error.tag}
+              </Badge>
+              <Badge className="text-gray-400 bg-yellow-400/10">
+                {new Date(error.createdAt).toLocaleDateString("en-US")}
+              </Badge>
             </div>
 
-            {/* Status + Button */}
             <div className="flex justify-between items-center mt-4">
-              <div className="flex gap-4">
-              <Badge
-                className={`${
-                  error.status === "Resolved"
-                    ? "bg-green-100 text-green-800"
-                    : "bg-yellow-100 text-yellow-800"
-                }`}
-              >
-                {error.status}
-              </Badge>
-              <Badge>
-                {error.createdAt.toLocaleDateString("en-US")}
-              </Badge>
+              <div className="flex gap-4 justify-between items-center text-sm">
+                <Badge
+                  className={`${
+                    error.status === "Resolved"
+                      ? "bg-green-100 text-green-800"
+                      : "bg-yellow-100 text-yellow-800"
+                  }`}
+                >
+                  {error.status}
+                </Badge>
 
-              </div>
-              <div className="flex items-center ">
-                <Button size="sm" variant="outline">
+                <Button
+                  onClick={() => handleDelete(error.id)}
+                  variant={"outline"}
+                  size={"sm"}
+                >
                   Delete
                 </Button>
               </div>
@@ -96,8 +143,8 @@ const page = async () => {
           </CardContent>
         </Card>
       ))}
-    </div>
+    </span>
   );
 };
 
-export default page;
+export default Page;
