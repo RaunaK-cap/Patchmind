@@ -116,7 +116,7 @@ export default function Dashboardlayout({ children }: { children: ReactNode }) {
                     key={item.id}
                     variant="ghost"
                     className={cn(
-                      "w-full justify-start gap-3 h-9 px-3 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                      "w-full justify-start gap-3 h-9 px-3 text-sidebar-foreground hover:bg-sidebar-accent hover:cursor-pointer hover:text-sidebar-accent-foreground"
                     )}
                     onClick={() => {
                       redirect(`${item.links}`);

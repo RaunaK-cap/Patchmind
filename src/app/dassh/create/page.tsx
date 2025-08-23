@@ -59,7 +59,7 @@ export default function MonitoringDashboard() {
           solution: values.solution,
           tag: values.tags,
           status: values.Status,
-          userid: session.data?.user.id,
+          userid: session?.user.id,
         });
         console.log(response.data);
         toast(`${response.data.message}`);
