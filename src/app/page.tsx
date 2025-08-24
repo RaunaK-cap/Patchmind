@@ -69,10 +69,10 @@ export default function Home() {
               onClick={() => {
                 redirect("/login");
               }}
-              className="px-6 py-2 rounded-xl flex items-center gap-2 bg-neutral-800 text-white font-semibold shadow-md hover:bg-neutral-700 transition"
+              className="px-6 py-2 rounded-xl flex items-center gap-2 bg-neutral-800 text-white font-semibold shadow-md hover:scale-105 transition-all "
             >
-              Try Now{" "}
-              <ArrowBigRightDashIcon className="animate-bounce size-6" />
+              Try Now
+              <ArrowBigRightDashIcon className="animate-bounce size-6 " />
             </button>
           </div>
         </section>
