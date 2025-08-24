@@ -185,7 +185,7 @@ export default function Dashboardlayout({ children }: { children: ReactNode }) {
               </div>
             </div>
           </div>
-          <div className="flex-1 p-4">
+          <div className="flex-1 p-2">
             <ThemeProvider
               attribute="class"
               defaultTheme="system"

@@ -23,7 +23,7 @@ const Page = () => {
   const { data: session } = authClient.useSession();
   const [errors, setErrors] = useState<ErrorData[]>([]);
   const [loading, setLoading] = useState(true);
-
+  const [ ErrNumber , setErrNumber ] = useState<string[]>([])
   if(!session){
     redirect("/")
   }
@@ -34,6 +34,8 @@ const Page = () => {
     }
   }, [session?.user?.id]);
 
+  
+  
   const fetchErrors = async () => {
     try {
       setLoading(true);
@@ -41,6 +43,7 @@ const Page = () => {
         id: session?.user.id
       });
       setErrors(response.data.data || []);
+      
     } catch (error) {
       console.error("Error fetching data:", error);
       setErrors([]);
@@ -48,6 +51,13 @@ const Page = () => {
       setLoading(false);
     }
   };
+  
+    useEffect(()=>{
+      setErrNumber(errors.map((data) => data.id))
+      
+    } , [errors])
+
+    console.log(ErrNumber.length)
 
   const handleDelete = async (id: string) => {
     try {
