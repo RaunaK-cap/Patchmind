@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -23,9 +23,8 @@ const Page = () => {
   const { data: session } = authClient.useSession();
   const [errors, setErrors] = useState<ErrorData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [ ErrNumber , setErrNumber ] = useState<string[]>([])
-  if(!session){
-    redirect("/")
+  if (!session) {
+    redirect("/");
   }
 
   useEffect(() => {
@@ -34,16 +33,13 @@ const Page = () => {
     }
   }, [session?.user?.id]);
 
-  
-  
   const fetchErrors = async () => {
     try {
       setLoading(true);
       const response = await axios.post("/api/getdata", {
-        id: session?.user.id
+        id: session?.user.id,
       });
       setErrors(response.data.data || []);
-      
     } catch (error) {
       console.error("Error fetching data:", error);
       setErrors([]);
@@ -51,35 +47,28 @@ const Page = () => {
       setLoading(false);
     }
   };
-  
-    useEffect(()=>{
-      setErrNumber(errors.map((data) => data.id))
-      
-    } , [errors])
-
-    console.log(ErrNumber.length)
 
   const handleDelete = async (id: string) => {
     try {
       await axios.delete("/api/delete", {
-        data: { id: id }
+        data: { id: id },
       });
-      // Refresh the data after deletion
+
       fetchErrors();
     } catch (error) {
       console.error("Error deleting:", error);
     }
   };
 
-  
-
   return (
     <span className="p-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {loading? (<div className="flex items-center justify-center relative left-[30rem] top-80 ">
-        <h1 className="text-lg"> Getting data ... </h1>
-      </div>):
-      " "
-      }
+      {loading ? (
+        <div className="flex items-center justify-center relative left-[30rem] top-80 ">
+          <h1 className="text-lg"> Getting data ... </h1>
+        </div>
+      ) : (
+        " "
+      )}
 
       {errors.map((error) => (
         <Card
