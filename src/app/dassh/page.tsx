@@ -2,6 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type React from "react";
 
+
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -20,6 +21,8 @@ import { Input } from "@/components/ui/input";
 import { Send, BarChart3, TrendingUp, Sparkles, Activity } from "lucide-react";
 import axios from "axios";
 import { Badge } from "@/components/ui/badge";
+import { string } from "zod";
+
 
 interface Message {
   id: number;
@@ -44,10 +47,7 @@ const Page = () => {
   const [ErrCount, setErrCount] = useState();
   const [dbdata, setdbdata] = useState<DBDATA[]>([]);
   const [messages, setMessages] = useState<Message[]>([
-    { id: 1, text: "Hi, how can I help you today?", isUser: false },
-    { id: 2, text: "Hey, I'm having trouble with my account.", isUser: true },
-    { id: 3, text: "What seems to be the problem?", isUser: false },
-    { id: 4, text: "I can't log in.", isUser: true },
+    { id: 1, text: "Hi, how can I help you ?", isUser: false },
   ]);
 
   const [inputValue, setInputValue] = useState("");
@@ -64,36 +64,61 @@ const Page = () => {
     }
   }, [session?.user?.id]);
 
-  if (isPending) return <></>;
+  if (isPending) return <> <div>
+    <h1> Loading ........</h1>
+    </div></>;
   if (!session) Router.push("/");
-
-  const handleSendMessage = () => {
-    if (inputValue.trim()) {
-      const newMessage: Message = {
-        id: messages.length + 1,
-        text: inputValue,
-        isUser: true,
-      };
-      setMessages([...messages, newMessage]);
-      setInputValue("");
-    }
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") handleSendMessage();
-  };
 
   async function fetchdata() {
     const response = await axios.post("/api/getdata", {
       id: session?.user.id,
     });
     setErrCount(response.data.data.length);
-    setdbdata(response.data.data);
+    setdbdata(response.data.data);  
   }
+
+  const handleSendMessage = async () => {
+    const prompt = inputValue.trim() ;
+    if (!prompt) return;
+
+    const userMsg: Message = {
+      id: messages.length + 1,
+      text: prompt,
+      isUser: true,
+    };
+    setMessages(prev => [...prev, userMsg]);
+    setInputValue("");
+
+    try {
+      const response_data = await axios.post("/api/llm", { message: prompt });
+      const aiText = response_data.data?.message?.content ?? "API is not avialabel ";
+
+      const llmMsg: Message = {
+        id: userMsg.id + 1,
+        text: aiText,
+        isUser: false,
+      };
+      setMessages(prev => [...prev, llmMsg]);
+    } catch {
+      const errMsg: Message = {
+        id: userMsg.id + 1,
+        text: "Error calling AI",
+        isUser: false,
+      };
+      setMessages(prev => [...prev, errMsg]);
+    }
+  };
+ 
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") handleSendMessage();
+  };
+
+  
 
   return (
     <div className="min-h-[70vh] px-4 sm:px-6 lg:px-10 bg-gradient-to-br from-background via-background/95 to-muted/20 animate-in slide-in-from-bottom-4 duration-700">
-      <div className="flex items-center gap-4 mb-8">
+      <div className="flex items-center gap-4 mb-4">
         <div className="relative">
           <div className="p-3 rounded-2xl bg-gradient-to-br from-primary/20 via-primary/10 to-primary/5 border border-primary/20 shadow-lg backdrop-blur-sm hover:shadow-xl transition-all duration-500 hover:scale-105">
             <BarChart3 className="w-6 h-6 text-primary" />
@@ -179,11 +204,11 @@ const Page = () => {
                   variant="outline"
                   className="bg-gradient-to-r from-primary/10 to-primary/5 text-primary border-primary/30 font-medium"
                 >
-                  {dbdata.slice(0,5).length} Total
+                  {dbdata.slice(0, 5).length} Total
                 </Badge>
               </div>
             </CardHeader>
-            <CardContent className="relative z-10 p-0">
+            <CardContent className="relative z-10 p-0 mx-4">
               <Table>
                 <TableCaption className="text-muted-foreground/60">
                   ............
@@ -247,7 +272,7 @@ const Page = () => {
             <div className="flex items-center gap-3">
               <div className="relative">
                 <Avatar className="w-10 h-10 border-2 border-accent/20 shadow-lg">
-                  <AvatarFallback className="bg-gradient-to-br from-accent/20 via-accent/15 to-accent/10 text-white font-bold">
+                  <AvatarFallback className="bg-gradient-to-br from-accent/20 via-accent/15 to-accent/10 dark:text-white text-black font-bold">
                     AI
                   </AvatarFallback>
                 </Avatar>
@@ -301,6 +326,8 @@ const Page = () => {
               />
               <Button
                 onClick={handleSendMessage}
+
+                
                 size="icon"
                 className="bg-gradient-to-br from-primary via-primary/95 to-primary/90 hover:from-primary/95 hover:via-primary/90 hover:to-primary/85 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 rounded-xl"
               >
