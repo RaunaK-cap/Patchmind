@@ -193,9 +193,9 @@ export default function MonitoringDashboard() {
                             className="w-full rounded-md border border-input bg-background px-2 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 "
                             {...field}
                           >
-                            <option value="pending">⏰ Pending</option>
-                            <option value="progress">🔄 In-Progress</option>
-                            <option value="resolved">✅ Resolved</option>
+                            <option value="Pending">⏰ Pending</option>
+                            <option value="Progress">🔄 In-Progress</option>
+                            <option value="Resolved">✅ Resolved</option>
                           </select>
                         </FormControl>
                         <FormMessage />
