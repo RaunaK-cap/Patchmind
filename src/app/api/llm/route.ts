@@ -1,12 +1,7 @@
 import { prismaclient } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
-import { z } from "zod"
 import { LLM_prompt_message } from "../../../../zodschema/managedata";
-
-
-
-
 
 export async function POST(req: NextRequest) {
 
@@ -25,7 +20,6 @@ export async function POST(req: NextRequest) {
     const userdata = JSON.stringify(DBdata)
 
     const body = await req.json()
-    
 
     const verifieddata = LLM_prompt_message.safeParse(body)
     
@@ -35,7 +29,6 @@ export async function POST(req: NextRequest) {
         })
     }
     
-    console.log(body.User_API)
     const openai = new OpenAI({
         
         apiKey:body.User_API ? body.User_API: process.env.GEMINI_API_KEY,
