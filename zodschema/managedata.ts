@@ -8,3 +8,8 @@ export const managedataschema = z.object({
     status: z.string().min(1 , "status must required"),
     tag:z.string().min(1, "status must required")
 })
+
+
+export const LLM_prompt_message = z.object({
+    message: z.string().min(1, "input must required").max(100, "word limits exceeds")
+})
