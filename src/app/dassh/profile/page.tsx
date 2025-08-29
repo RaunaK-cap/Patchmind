@@ -3,18 +3,25 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import React from "react";
+import React, { useState } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { authClient } from "@/lib/auth-client";
 import { logout } from "../layout";
 import { redirect } from "next/navigation";
+import axios from "axios";
 
 const Page = () => {
+  const [ userAPI , setuserAPI] = useState("")
   const { data: session } = authClient.useSession();
   if(!session){
         redirect("/")
   }
+
+    async function Submit(){
+        console.log("data send" , userAPI)
+        // call your backend here 
+    } 
   return (
     <div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -58,14 +65,17 @@ const Page = () => {
           <CardContent className="grid grid-cols-1 md:grid-cols-1 gap-4">
             <div className="space-y-2">
               <Label>Enter your own API </Label>
-              <Input type="password" placeholder="sk-..." />
-              <Button  className="rounded-xl w-full ">Save</Button>
+              <Input
+              value={userAPI}
+              onChange={(e)=>{setuserAPI(e.target.value)}}
+              type="password" placeholder="sk-..." />
+              <Button onClick={Submit} disabled className="rounded-xl w-full ">Save</Button>
             </div>
             <div>
               <CardContent className=" bg-blue-200/10 h-[8rem] rounded-xl p-4">
                 <h1 className="text-lg">Note:</h1>
                 <Label className="text-neutral-500 mt-2">
-                  To use the AI features you can use your own API..
+                    Currently Unavailabel Right now
                 </Label>
               </CardContent>
             </div>
