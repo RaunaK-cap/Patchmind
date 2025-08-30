@@ -4,12 +4,12 @@ import { Button } from "@/components/ui/button"
 import { ArrowBigRightDashIcon, Brain, Zap, Shield, Github, Twitter, Linkedin, Mail } from "lucide-react"
 import { redirect } from "next/navigation"
 
+
+
 export default function Home() {
   return (
     <div className="relative">
-      {/* Hero Section */}
       <div className="min-h-screen w-full relative">
-        {/* Radial Gradient Background */}
         <div
           className="absolute inset-0 z-0"
           style={{
@@ -52,7 +52,6 @@ export default function Home() {
               search, and revisit every bug you've fixed — so you'll never forget.
             </p>
 
-            {/* CTA Buttons */}
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
               <button
                 onClick={() => {
@@ -145,7 +144,6 @@ export default function Home() {
       </section>
 
       <section id="about" className="relative py-20 font-sans">
-        {/* Radial gradient background similar to hero */}
         <div
           className="absolute inset-0 bg-neutral-100"
         
@@ -199,7 +197,7 @@ export default function Home() {
 
         <div className="relative z-10 max-w-6xl mx-auto px-6 text-white">
           <div className="grid md:grid-cols-4 gap-8 mb-12">
-            {/* Brand */}
+
             <div className="md:col-span-2">
               <div className="text-2xl font-bold mb-4">PatchMind</div>
               <p className="text-gray-200 leading-relaxed max-w-md">
@@ -208,7 +206,6 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Quick Links */}
             <div>
               <h4 className="font-semibold mb-4">Quick Links</h4>
               <ul className="space-y-2 text-gray-300">
@@ -235,7 +232,7 @@ export default function Home() {
               </ul>
             </div>
 
-            {/* Support */}
+
             <div>
               <h4 className="font-semibold mb-4">Support</h4>
               <ul className="space-y-2 text-gray-300">
@@ -263,7 +260,7 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Bottom Section */}
+
           <div className="border-t border-white/20 pt-8 flex flex-col md:flex-row justify-between items-center">
             <div className="text-gray-300 mb-4 md:mb-0">© 2024 PatchMind. All rights reserved.</div>
 

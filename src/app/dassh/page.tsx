@@ -21,7 +21,6 @@ import { Input } from "@/components/ui/input";
 import { Send, BarChart3, TrendingUp, Sparkles, Activity } from "lucide-react";
 import axios from "axios";
 import { Badge } from "@/components/ui/badge";
-import { string } from "zod";
 
 
 interface Message {
@@ -65,7 +64,57 @@ const Page = () => {
   }, [session?.user?.id]);
 
   if (isPending) return <> <div>
-    <h1> Loading ........</h1>
+   <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 animate-pulse">
+      {/* Top Left Cards */}
+      <div className="grid grid-cols-1 gap-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+        <div className="bg-zinc-900 rounded-2xl p-4 space-y-4">
+          <div className="h-5 w-32 bg-zinc-700 rounded"></div>
+          <div className="h-3 w-48 bg-zinc-800 rounded"></div>
+          <div className="h-16 w-16 bg-zinc-700 rounded-lg"></div>
+        </div>
+
+        <div className="bg-zinc-900 rounded-2xl p-4 space-y-4">
+          <div className="h-5 w-40 bg-zinc-700 rounded"></div>
+          <div className="flex gap-2">
+            <div className="h-6 w-12 bg-zinc-700 rounded-full"></div>
+            <div className="h-6 w-12 bg-zinc-700 rounded-full"></div>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-zinc-900 rounded-2xl p-4 col-span-1 lg:col-span-2">
+        <div className="h-5 w-40 bg-zinc-700 rounded mb-4"></div>
+        <div className="space-y-3">
+          {[1, 2, 3].map((i) => (
+            <div
+              key={i}
+              className="flex justify-between items-center gap-4 border-b border-zinc-800 pb-2"
+            >
+              <div className="h-4 w-24 bg-zinc-700 rounded"></div>
+              <div className="h-6 w-20 bg-zinc-800 rounded-full"></div>
+              <div className="h-6 w-20 bg-zinc-700 rounded-full"></div>
+            </div>
+          ))}
+        </div>
+      </div>
+      </div>
+      {/* AI Chat Box */}
+      <div className="bg-zinc-900 rounded-2xl p-4 flex flex-col justify-between">
+        <div className="space-y-3">
+          <div className="h-5 w-40 bg-zinc-700 rounded"></div>
+          <div className="h-3 w-56 bg-zinc-800 rounded"></div>
+          <div className="h-10 w-full bg-zinc-800 rounded"></div>
+        </div>
+        <div className="flex mt-4 gap-2">
+          <div className="flex-1 h-10 bg-zinc-800 rounded-xl"></div>
+          <div className="h-10 w-10 bg-zinc-700 rounded-full"></div>
+        </div>
+      </div>
+
+      {/* Recent Errors Table */}
+    </div>
     </div></>;
   if (!session) Router.push("/");
 
