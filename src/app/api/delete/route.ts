@@ -1,11 +1,7 @@
-import { auth } from "@/lib/auth";
 import { prismaclient } from "@/lib/db";
-import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-
 export  async function DELETE(req:NextRequest){
     
-
     const body = await req.json()
     try {
         await prismaclient.trackingdata.delete({
@@ -21,4 +17,4 @@ export  async function DELETE(req:NextRequest){
             message:" Error while deleting "
         })
     }
-}
+};
