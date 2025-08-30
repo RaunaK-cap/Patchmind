@@ -21,28 +21,20 @@ import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { useTransition } from "react";
 import { redirect } from "next/navigation";
-
-const createErrorSchema = z.object({
-  title: z.string().min(2, "title must required"),
-  Description: z.string().min(2, "Description must Required"),
-  codesnippet: z.string().min(2, "Codesnippet must required"),
-  solution: z.string().min(2, "Solution must required"),
-  tags: z.string().min(1, "Tag must required"),
-  Status: z.string().min(1, "Status must required"),
-});
+import { Badge } from "@/components/ui/badge";
+import { createErrorSchema } from "../../../../zodschema/managedata";
 
 export default function MonitoringDashboard() {
   const [onsubmit, startonsubmit] = useTransition();
   const { data: session } = authClient.useSession();
-  if(!session){
-    redirect("/")
+  if (!session) {
+    redirect("/");
   }
 
   const form = useForm<z.infer<typeof createErrorSchema>>({
     resolver: zodResolver(createErrorSchema),
     defaultValues: {
       title: "",
-      Description: "",
       codesnippet: "",
       solution: "",
       tags: "",
@@ -76,8 +68,10 @@ export default function MonitoringDashboard() {
           <Card className="rounded-2xl">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <FilePlus2 className="h-5 w-5 text-blue-500" />
-                Add New Error
+                <FilePlus2 className="h-5 w-5 text-blue-500 animate-bounce" />
+                <Badge variant={"default"} className="py-1">
+                  Add New Error
+                </Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -86,7 +80,9 @@ export default function MonitoringDashboard() {
                 name="title"
                 render={({ field }) => (
                   <FormItem className=" h-25">
-                    <FormLabel>Title</FormLabel>
+                    <FormLabel>
+                      <Badge variant={"outline"}>Title </Badge>
+                    </FormLabel>
                     <FormControl className="space-y-2">
                       <Input
                         placeholder="e.g., NextAuth session undefined on SSR"
@@ -104,7 +100,9 @@ export default function MonitoringDashboard() {
                   name="codesnippet"
                   render={({ field }) => (
                     <FormItem className=" h-25">
-                      <FormLabel> Error Code </FormLabel>
+                      <FormLabel>
+                        <Badge variant={"outline"}> Error Code </Badge>{" "}
+                      </FormLabel>
                       <FormControl className="space-y-2">
                         <textarea
                           rows={6}
@@ -122,30 +120,12 @@ export default function MonitoringDashboard() {
               <div className="space-y-2">
                 <FormField
                   control={form.control}
-                  name="Description"
-                  render={({ field }) => (
-                    <FormItem className=" h-25">
-                      <FormLabel> Description </FormLabel>
-                      <FormControl className="space-y-2">
-                        <textarea
-                          rows={6}
-                          className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                          placeholder="What happened ? "
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="space-y-2">
-                <FormField
-                  control={form.control}
                   name="solution"
                   render={({ field }) => (
                     <FormItem className=" h-25">
-                      <FormLabel> Solution/Fix </FormLabel>
+                      <FormLabel>
+                        <Badge variant={"outline"}> Solution/Fix </Badge>{" "}
+                      </FormLabel>
                       <FormControl className="space-y-2">
                         <textarea
                           rows={4}
@@ -161,15 +141,14 @@ export default function MonitoringDashboard() {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
                 <div className="space-y-2">
-                  {/* <Label>Tags</Label>
-              <Input placeholder="auth, prisma, websocket" /> */}
-
                   <FormField
                     control={form.control}
                     name="tags"
                     render={({ field }) => (
                       <FormItem className=" h-25">
-                        <FormLabel> Tags </FormLabel>
+                        <FormLabel>
+                          <Badge variant={"outline"}> Tags </Badge>{" "}
+                        </FormLabel>
                         <FormControl className="space-y-2">
                           <Input
                             placeholder="auth, prisma, websocket"
@@ -187,7 +166,9 @@ export default function MonitoringDashboard() {
                     name="Status"
                     render={({ field }) => (
                       <FormItem className="space-y-2">
-                        <FormLabel> Status </FormLabel>
+                        <FormLabel>
+                          <Badge variant={"outline"}> Status </Badge>{" "}
+                        </FormLabel>
                         <FormControl className="space-y-2">
                           <select
                             className="w-full rounded-md border border-input bg-background px-2 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 "
@@ -208,9 +189,6 @@ export default function MonitoringDashboard() {
                 <Button type="submit" size={"lg"} className="rounded-2xl">
                   {onsubmit ? <Loader2 className="animate-spin" /> : "Save"}
                 </Button>
-                <Button variant="secondary" className="rounded-2xl">
-                  Ask AI
-                </Button>
               </div>
             </CardContent>
           </Card>
@@ -223,15 +201,15 @@ export default function MonitoringDashboard() {
         </CardHeader>
         <CardContent className="text-sm space-y-3">
           <p>• Keep titles short and searchable.</p>
-          <p>• Link commits, PRs, and docs for faster recall.</p>
+          <p>• Add short solutions </p>
           <p>
-            • Mark as <b>Resolved</b> only after verifying in prod.
+            • Mark as <b>Resolved</b> if its solved .
           </p>
           <div className="pt-2">
             <Label className="mb-1 block">Quality of Repro Steps</Label>
             <div className="w-full bg-secondary rounded-full h-2">
               <div
-                className="bg-primary h-2 rounded-full"
+                className="bg-indigo-500 h-2 rounded-full"
                 style={{ width: "76%" }}
               ></div>
             </div>
@@ -241,4 +219,3 @@ export default function MonitoringDashboard() {
     </div>
   );
 }
- 
