@@ -75,7 +75,7 @@ const Page = () => {
               <CardContent className=" bg-blue-200/10 h-[8rem] rounded-xl p-4">
                 <h1 className="text-lg">Note:</h1>
                 <Label className="text-neutral-500 mt-2">
-                    Currently Unavailabel Right now
+                     Unavailabel Right now
                 </Label>
               </CardContent>
             </div>
