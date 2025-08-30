@@ -2,10 +2,20 @@ import { prismaclient } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 import { LLM_prompt_message } from "../../../../zodschema/managedata";
+import { headers } from "next/headers"
+import { auth } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
 
+    const session = await auth.api.getSession({
+        headers: await headers() 
+    })
+    
+
     const DBdata = await prismaclient.trackingdata.findMany({
+        where:{
+            userid:session?.user.id
+        },      
         take: 2,
         select: {
             title: true,
@@ -16,6 +26,8 @@ export async function POST(req: NextRequest) {
         }
 
     })
+
+    console.log(DBdata)
 
     const userdata = JSON.stringify(DBdata)
 
