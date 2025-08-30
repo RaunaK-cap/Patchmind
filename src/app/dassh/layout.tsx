@@ -2,7 +2,6 @@
 import { ReactNode } from "react";
 
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import {
   Search,
   BarChart3,
@@ -25,14 +24,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { Themetoggler } from "@/components/Theme-toggler";
-import { redirect, useRouter } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import { Input } from "@/components/ui/input";
-
 import { ThemeProvider } from "@/components/theme-provider";
-
 import { authClient } from "@/lib/auth-client";
-
-import { ProfileDropdownClient } from "../Components/ProfiledropdownClient";
 
 const sidebarItems = [
   {
@@ -41,6 +36,7 @@ const sidebarItems = [
     icon: BarChart3,
     active: false,
     links: "/dassh",
+    href: "/dassh",
   },
   {
     id: "issues",
@@ -48,6 +44,7 @@ const sidebarItems = [
     icon: LayoutDashboard,
     active: true,
     links: "/dassh/create",
+    href: "/dassh/create",
   },
   {
     id: "my error",
@@ -55,6 +52,7 @@ const sidebarItems = [
     icon: Logs,
     active: false,
     links: "/dassh/myerrors",
+    href: "/dassh/myerrors",
   },
   {
     id: "profile",
@@ -62,6 +60,7 @@ const sidebarItems = [
     icon: UserRoundPen,
     active: false,
     links: "/dassh/profile",
+    href: "/dassh/profile",
   },
 ];
 
@@ -75,6 +74,7 @@ export async function logout() {
   });
 }
 export default function Dashboardlayout({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
   return (
     <>
       <div className=" flex h-screen bg-background font-sans ">
@@ -93,21 +93,18 @@ export default function Dashboardlayout({ children }: { children: ReactNode }) {
                 <div>
                   <h2 className="text-lg"> PatchMind </h2>
                   <p className="text-sm dark:text-neutral-500 text-neutral-400">
-                    Debug smarter
+                    Never Forget
                   </p>
                 </div>
               </div>
             </div>
-
             <Button
               variant="ghost"
               size="sm"
               className="h-8 w-8 p-0 text-sidebar-foreground hover:bg-sidebar-accent"
             ></Button>
           </div>
-
-          {/* Navigation Items */}
-          <nav className="flex-1 p-2 mt-5 mx-2">
+          <nav className="flex-1 items-center justify-center p-2 mt-5 mx-2">
             <div className="space-y-1">
               {sidebarItems.map((item) => {
                 const Icon = item.icon;
@@ -116,21 +113,21 @@ export default function Dashboardlayout({ children }: { children: ReactNode }) {
                     key={item.id}
                     variant="ghost"
                     className={cn(
-                      "w-full justify-start gap-3 h-9 px-3 text-sidebar-foreground hover:bg-sidebar-accent hover:cursor-pointer hover:text-sidebar-accent-foreground"
+                      "w-[10rem] flex items-center gap-2 px-3 py-2 justify-start",
+                      pathname == item.href
+                        ? "bg-neutral-100 text-blue-600 dark:bg-indigo-700 dark:text-neutral-100 dark:hover:bg-indigo-800"
+                        : ""
                     )}
-                    onClick={() => {
-                      redirect(`${item.links}`);
-                    }}
+                    onClick={() => redirect(`${item.links}`)}
                   >
-                    <Icon className="h-4 w-4 flex-shrink-0" />
-                    <div> {item.label}</div>
+                    <Icon className="h-4 w-4 shrink-0" />
+                    <span className="truncate">{item.label}</span>
                   </Button>
                 );
               })}
             </div>
           </nav>
         </div>
-
         <div className="flex-1 flex flex-col ml-52">
           <div className="sticky top-0 z-30 backdrop-blur flex justify-between supports-[backdrop-filter]:bg-white/40 dark:supports-[backdrop-filter]:bg-zinc-950/40 border-zinc-200/60 dark:border-zinc-800/60">
             <div className="flex items-center gap-3 px-4 md:px-6 h-16">
@@ -149,7 +146,6 @@ export default function Dashboardlayout({ children }: { children: ReactNode }) {
                 </Button>
               </div>
             </div>
-
             <div className="flex items-center gap-4 px-4 md:px-6 h-16">
               <Themetoggler />
               <div>
