@@ -86,7 +86,10 @@ export default function Page() {
   const refetchWithSpin = async () => {
     try {
       setRefreshing(true);
-      await fetchErrors();
+      const response = await axios.post("/api/getdata", {
+        id: session?.user.id,
+      });
+      setErrors(response.data.data || []);
     } finally {
       setRefreshing(false);
     }
