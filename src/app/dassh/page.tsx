@@ -1,8 +1,6 @@
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type React from "react";
-
-
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -58,6 +56,15 @@ const Page = () => {
   }, [messages]);
 
   useEffect(() => {
+    async function fetchdata() {
+      const response = await axios.post("/api/getdata", {
+        id: session?.user.id,
+      });
+      setErrCount(response.data.data.length);
+      setdbdata(response.data.data);  
+    }
+
+
     if (session?.user?.id) {
       fetchdata();
     }
@@ -65,7 +72,7 @@ const Page = () => {
 
   if (isPending) return <> <div>
    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 animate-pulse">
-      {/* Top Left Cards */}
+      
       <div className="grid grid-cols-1 gap-10">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
@@ -100,7 +107,7 @@ const Page = () => {
         </div>
       </div>
       </div>
-      {/* AI Chat Box */}
+
       <div className="bg-zinc-900 rounded-2xl p-4 flex flex-col justify-between">
         <div className="space-y-3">
           <div className="h-5 w-40 bg-zinc-700 rounded"></div>
@@ -113,18 +120,10 @@ const Page = () => {
         </div>
       </div>
 
-      {/* Recent Errors Table */}
+      
     </div>
     </div></>;
   if (!session) Router.push("/");
-
-  async function fetchdata() {
-    const response = await axios.post("/api/getdata", {
-      id: session?.user.id,
-    });
-    setErrCount(response.data.data.length);
-    setdbdata(response.data.data);  
-  }
 
   const handleSendMessage = async () => {
     const prompt = inputValue.trim() ;
@@ -176,7 +175,7 @@ const Page = () => {
         </div>
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
-            {" "}
+            
             Your Dashboard
           </h1>
           <p className="text-muted-foreground font-medium">
@@ -221,7 +220,7 @@ const Page = () => {
                   Most Frequent Errors
                 </CardTitle>
                 <p className="text-xs text-amber-700/80 dark:text-amber-300/80 font-medium">
-                  Most Recent errors you've solved:
+                  Most Recent errors you have solved:
                 </p>
               </CardHeader>
               <CardContent className="flex items-center gap-4 relative z-10">
