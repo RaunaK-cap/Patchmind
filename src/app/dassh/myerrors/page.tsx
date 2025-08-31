@@ -100,7 +100,7 @@ export default function Page() {
 
   const headerSubtitle = useMemo(() => {
     if (loading) return "Syncing your patches...";
-    if (!errors?.length) return "No logs yet – ship some code and add your first patch.";
+    if (!errors?.length) return "No logs yet – ship some code and add ";
     return `${errors.length} ${errors.length === 1 ? "entry" : "entries"}`;
   }, [loading, errors]);
 
@@ -143,9 +143,6 @@ export default function Page() {
             <div className="relative animate-fadeInUp">
               <div className="rounded-2xl border border-dashed border-black/10 dark:border-white/10 px-6 py-8 bg-white/50 dark:bg-white/5">
                 <h2 className="text-lg font-semibold">Nothing here yet</h2>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Your fixes will appear here as beautiful, shareable cards.
-                </p>
                 <div className="mt-4">
                   <Button onClick={refetchWithSpin} size="sm" variant="secondary" className="shadow">
                     Fetch again
