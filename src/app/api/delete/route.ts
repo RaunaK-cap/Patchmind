@@ -14,7 +14,8 @@ export  async function DELETE(req:NextRequest){
         })
     } catch (error) {
         return NextResponse.json({
-            message:" Error while deleting "
+            message:" Error while deleting ",
+            error
         })
     }
 };

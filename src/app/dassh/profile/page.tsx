@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { authClient } from "@/lib/auth-client";
 import { logout } from "../layout";
 import { redirect } from "next/navigation";
-import axios from "axios";
+
 
 const Page = () => {
   const [ userAPI , setuserAPI] = useState("")

@@ -48,26 +48,29 @@ export default function Page() {
     redirect("/");
   }
 
-  const fetchErrors = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.post("/api/getdata", {
-        id: session?.user.id,
-      });
-      setErrors(response.data.data || []);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setErrors([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(()=>{
 
-  useEffect(() => {
+    const fetchErrors = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.post("/api/getdata", {
+          id: session?.user.id,
+        });
+        setErrors(response.data.data || []);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setErrors([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
     if (session?.user?.id) {
       fetchErrors();
     }
-  }, [session?.user?.id]);
+  } , [session?.user?.id])
+
+ 
 
   const handleDelete = async (id: string) => {
     try {
