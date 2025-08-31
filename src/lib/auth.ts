@@ -19,4 +19,7 @@ export const auth = betterAuth({
           clientSecret: process.env.GOOGLE_CLIENT_SECRET as string, 
       }, 
       }, 
+      onError(error:unknown) {
+        console.error("🔥 BetterAuth Error:", error);
+      }
 });
