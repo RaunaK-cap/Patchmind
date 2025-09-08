@@ -273,13 +273,15 @@ export default function Home() {
               </div>
               <div className="flex space-x-6">
                 <Link
-                  href="#"
+                  href="https://github.com/RaunaK-cap/Patchmind"
+                  target="_blank"
                   className="hover:text-white hover:scale-110 transition"
                 >
                   <Github className="w-5 h-5" />
                 </Link>
                 <Link
-                  href="#"
+                  href="https://x.com/caps_raunak"
+                  target="_blank"
                   className="hover:text-white hover:scale-110 transition"
                 >
                   <Twitter className="w-5 h-5" />
