@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -11,6 +11,8 @@ import {
   Plus,
   BrainCogIcon,
   UserRoundIcon,
+  PanelLeftClose,
+  PanelLeftOpen,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -75,16 +77,18 @@ export async function logout() {
 }
 export default function Dashboardlayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
+  const [ open , setopen ] = useState<boolean>(false)
+
   return (
     <>
       <div className=" flex h-screen bg-background font-sans ">
         <div
           className={
-            "fixed left-0 top-0 h-screen z-30 w-52 border-r border-sidebar-border transition-all duration-300 "
+            `absolute left-0 top-0 h-screen z-50  border-r border-sidebar-border transition-all duration-300    overflow-hidden ${open ? "w-52 dark:bg-black bg-white" : "w-0"} md:sticky md:top-0 md:left-0 md:h-screen md:w-52 md:block md:overflow-visible`
           }
         >
-          <div className="flex  items-center justify-center p-2 border-sidebar-border">
-            <div className="flex items-center mt-2 ">
+          <div className="flex items-center justify-center p-2 border-sidebar-border">
+            <div className="flex items-center mt-2 px-2 w-full justify-between gap-3 ">
               <div
                 onClick={() => redirect("/")}
                 className="text-sm flex items-center gap-2"
@@ -97,12 +101,17 @@ export default function Dashboardlayout({ children }: { children: ReactNode }) {
                   </p>
                 </div>
               </div>
+                <div>
+
+                
+                <Button
+                variant="link"
+                size="lg"
+                className="h-8 w-8 p-0  dark:text-white text-black md:hidden "
+                onClick={() => setopen(prev => !prev)}
+              > <PanelLeftClose/> </Button>
+              </div>
             </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-8 w-8 p-0 text-sidebar-foreground hover:bg-sidebar-accent"
-            ></Button>
           </div>
           <nav className="flex-1 items-center justify-center p-2 mt-5 mx-2">
             <div className="space-y-1">
@@ -128,9 +137,18 @@ export default function Dashboardlayout({ children }: { children: ReactNode }) {
             </div>
           </nav>
         </div>
-        <div className="flex-1 flex flex-col ml-52">
+        <div className={`flex-1 flex flex-col ml-0`}>
           <div className="sticky top-0 z-30 backdrop-blur flex justify-between supports-[backdrop-filter]:bg-white/40 dark:supports-[backdrop-filter]:bg-zinc-950/40 border-zinc-200/60 dark:border-zinc-800/60">
             <div className="flex items-center gap-3 px-4 md:px-6 h-16">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="md:hidden"
+                onClick={() => setopen(prev => !prev)}
+                aria-expanded={open}
+              >
+                <PanelLeftOpen className="h-5 w-5" />
+              </Button>
               <div className="relative flex w-full md:max-w-md gap-5">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 opacity-60" />
                 <Input
