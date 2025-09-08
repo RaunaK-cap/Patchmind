@@ -139,17 +139,17 @@ export default function MonitoringDashboard() {
                   )}
                 />
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-                <div className="space-y-2">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-10 items-center justify-center">
+                <div >
                   <FormField
                     control={form.control}
                     name="tags"
                     render={({ field }) => (
-                      <FormItem className=" h-25">
+                      <FormItem >
                         <FormLabel>
                           <Badge variant={"outline"}> Tags </Badge>{" "}
                         </FormLabel>
-                        <FormControl className="space-y-2">
+                        <FormControl className="">
                           <Input
                             placeholder="auth, prisma, websocket"
                             {...field}
@@ -160,21 +160,20 @@ export default function MonitoringDashboard() {
                     )}
                   ></FormField>
                 </div>
-                <div className="space-y-2">
+                <div >
                   <FormField
                     control={form.control}
                     name="Status"
                     render={({ field }) => (
-                      <FormItem className="space-y-2">
+                      <FormItem className="">
                         <FormLabel>
                           <Badge variant={"outline"}> Status </Badge>{" "}
                         </FormLabel>
-                        <FormControl className="space-y-2">
+                        <FormControl className="">
                           <select
                             className="w-full rounded-md border border-input bg-background px-2 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 "
                             {...field}
                           >
-                            <option value="Pending">⏰ Pending</option>
                             <option value="Progress">🔄 In-Progress</option>
                             <option value="Resolved">✅ Resolved</option>
                           </select>
